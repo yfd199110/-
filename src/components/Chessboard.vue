@@ -21,18 +21,32 @@ export default {
       dymamicComponent: '',
       color: 'false',
       // 人机下棋切换
-      curPlayer: 'player'
+      curPlayer: 'player',
+      // 数组表示棋子赢了的可能的排列组合
+      wincoditionsList: [
+        [1, 2, 3], [4, 5, 6], [7, 8, 9],
+        [1, 4, 7], [2, 5, 8], [3, 6, 9],
+        [1, 5, 9], [3, 5, 7]
+      ]
     }
   },
   computed: {
     ...mapGetters(['chessList']),
     className () {
-      console.log('exe computerFn');
       return value => {
-        console.log(value);
         if (!value) return ''
         return value === 'player' ? 'chessmanBlue' : 'chessmanRed'
       }
+    },
+    // 获取各自对应的数列
+    blueChessmanList () {
+      return this.chessList.flat().filter(ele => ele.value === 'player');
+    },
+    redChessmanList () {
+      return this.chessList.flat().filter(ele => ele.value === 'computer');
+    },
+    ununllNum () {
+      return this.chessList.flat().filter(ele => ele.value !== '').length;
     }
   },
   methods: {
@@ -49,7 +63,7 @@ export default {
       const randomNum = Math.floor(Math.random() * leftList.length);
       const indexPara = leftList[randomNum].index;
       this.change_value({ index: indexPara, value: 'computer' });
-      console.table(this.chessList.flat());
+      this.winConditions('computer');
     },
 
     // 玩家执棋
@@ -58,15 +72,38 @@ export default {
       if (this.chessList.flat()[index - 1].value) return
       // 改变当前点击的格子的状态value，确定是玩家自己下棋的格子
       this.change_value({ index, value: 'player' });
+      this.winConditions('player');
       this.copmputerPlay(index);
     },
 
     // 关于判断是否有一方已经赢了的问题
-    winConditions () {
-      // 横向三个为一样的话，就赢了，游戏结束
+    winConditions (color) {
+      // 定义棋子取胜的情况
+      // 判断绿棋子赢了的情况
+      const listByPlayer = [];
+      const curList = this.chessList.flat().filter(ele => ele.value === color);
+      if (curList.length <= 2) return
+      curList.forEach(ele => {
+        listByPlayer.push(ele.index);
+      });
+      // 判断生成的数组是否包含了稳conditions中的任何一种
+      const whetherWin = this.wincoditionsList.some(ele => {
+        return ele.some(element => listByPlayer.includes(element));
+      }
+      );
+      if (whetherWin) {}
+    }
+  },
+  watch: {
+    chessList: {
+      immediate: true,
+      deep: true,
+      handler: function () {
+      }
     }
   }
 }
+  // 监听数组的变化 判断是否有一方已经赢了
 </script>
 
 <style scoped>
