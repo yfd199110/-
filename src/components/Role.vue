@@ -5,7 +5,7 @@
       <span @click="goGame('X')">X</span>
       <span @click="goGame('O')">O</span>
     </section>
-    <span class="back" @click="goback"><i class="iconfont">&#xe62e;</i>Back</span>
+    <span class="back" @click="goback"><i class="iconfont">&#xe626;</i>Back</span>
   </div>
 </template>
 
@@ -29,22 +29,6 @@ export default {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: 'iconfont';
-  src: url('../assets/fonts/iconfont.eot');
-  src: url('../assets/fonts/iconfont.eot?#iefix') format('embedded-opentype'),
-      url('../assets/fonts/iconfont.woff') format('woff'),
-      url('../assets/fonts/iconfont.woff2') format('woff2'),
-      url('../assets/fonts/iconfont.ttf') format('truetype'),
-      url('../assets/fonts/iconfont.svg#iconfont') format('svg');
-}
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 25px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 .checkRole {
     text-align: center;
     color: white;

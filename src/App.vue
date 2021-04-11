@@ -4,8 +4,8 @@
     <div class="container">
       <!-- 数据显示页 -->
       <div class="gameState" v-show="true">
-        <span>player 1 🚩🚩🚩</span>
-        <span>player 2 🚩</span>
+        <span class="iconfont">&#xe6c8;<span></span></span>
+        <span class="iconfont" dir="rtl"><span></span>&#xe60d;</span>
       </div>
       <!-- 重置按钮,这个按钮会将游戏导向最开始的页面,并且清除数据 -->
       <button class="reset">重置</button>
@@ -57,7 +57,7 @@ export default {
   bottom: -30px;
   right: 10px;
   min-width: 40px;
-  background-color: transparent;
+  background-color: rgb(75, 196, 165);
   border-radius: 20px;
 }
 </style>

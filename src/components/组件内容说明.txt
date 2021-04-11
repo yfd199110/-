@@ -1,0 +1,5 @@
+Chessboard.vue  -- 描述棋盘以及下棋效果展示
+Mode.vue  -- 选择人机模式或者玩家对战
+Role.vue  -- 玩家选择用什么棋子
+WinAnimation.vue  -- 赢了旗之后的动画（是小红旗从两侧升起的效果展示）
+WinPopBox.vue -- 一方赢了之后从棋盘中弹出一个提醒的盒子
