@@ -50,5 +50,6 @@ export default {
 }
 @keyframes flagMove_rightToLeft {
   from { right: -30px; } to { right: 5%; };
+  from { transform: rotateY(0deg); } to { transform: rotateY(180deg)};
 }
 </style>

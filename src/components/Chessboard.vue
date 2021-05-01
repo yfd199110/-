@@ -8,12 +8,20 @@
       </ul>
     </template>
     <WinAnimation v-if="winFlag" :whoWin="curPlayer"></WinAnimation>
-    <WinPopBox v-if="winFlag" :whoWin="curPlayer"></WinPopBox>
+    <transition name="winPopBox">
+      <!-- 关于这个组件的三种不同的形态, 分别是谁在下棋,谁赢了,使用keep-alive组件 -->
+      <keep-alive>
+        <!-- 如果传递参数来进行不同弹框容和样式的转换 -->
+        <WinPopBox :whoPlay="curPlayer" v-show="true" :anyoneWin="winFlag"></WinPopBox>
+      </keep-alive>
+    </transition>
+    <!-- 重置按钮,这个按钮会将游戏导向最开始的页面,并且清除数据 -->
+    <button class="reset" title="该功能会将所有的对局信息全部清除" @click="reset">重置</button>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import WinAnimation from './WinAnimation';
 import WinPopBox from './WinPopBox';
 
@@ -22,12 +30,15 @@ export default {
   components: { WinAnimation, WinPopBox },
   data () {
     return {
+      // playchess函数的执行开关
+      playchessContral: true,
+      currentPlayerMark: false,
       winFlag: false,
       // 动态组件
       dymamicComponent: '',
       color: 'false',
       // 表示当前是谁在下棋
-      curPlayer: '',
+      curPlayer: 'player',
       // 数组表示棋子赢了的可能的排列组合
       wincoditionsList: [
         [1, 2, 3], [4, 5, 6], [7, 8, 9],
@@ -37,7 +48,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['chessList']),
+    ...mapState({
+      chessList: 'chessman_list'
+    }),
 
     className () {
       return value => {
@@ -53,7 +66,7 @@ export default {
 
   methods: {
     // 辅助函数映射
-    ...mapMutations(['set_mode', 'set_role', 'change_value']),
+    ...mapMutations(['set_mode', 'set_role', 'change_value', 'reset_chessman_list']),
     // 电脑下棋的逻辑
     copmputerPlay (index) {
       this.curPlayer = 'computer';
@@ -66,21 +79,30 @@ export default {
       const randomNum = Math.floor(Math.random() * leftList.length);
       const indexPara = leftList[randomNum].index;
       this.change_value({ index: indexPara, value: 'computer' });
-      this.winConditions('computer');
+      // 如果电脑赢得了比赛,就禁止继续向组件传递谁在下棋的数据信息
+      if (this.winConditions('computer')) return false;
+      this.curPlayer = 'player';
+      this.playchessContral = true;
     },
 
     // 玩家执棋
     paly_chess (e, index) {
+      // 判断这个函数的控制开关是否时允许这个函数执行
+      if (!this.playchessContral) return
       // 将当前下棋者切换位玩家
       this.curPlayer = 'player';
-      // ru如果赢了之后 不在执行这个函数
+      // // 如果赢了之后 不在执行这个函数
       if (this.winFlag) return
+      console.log('test');
       // 判断当前这地方是否已经有棋子
       if (this.chessList.flat()[index - 1].value) return
       // 改变当前点击的格子的状态value，确定是玩家自己下棋的格子
       this.change_value({ index, value: 'player' });
       if (this.winConditions('player')) return false;
-      this.copmputerPlay(index);
+      setTimeout(this.copmputerPlay, 500, index);
+      // 解决提示栏的显示谁该下棋的问题
+      this.curPlayer = 'computer';
+      this.playchessContral = false;
     },
 
     // 关于判断是否有一方已经赢了的问题
@@ -104,6 +126,13 @@ export default {
         this.winFlag = true
       };
       return whetherWin;
+    },
+
+    // 重置时 执行函数
+    reset () {
+      this.reset_chessman_list();
+      this.winFlag = false;
+      this.playchessContral = true;
     }
   },
   watch: {
@@ -151,5 +180,26 @@ li.chessmanBlue span {
 }
 li.chessmanRed span {
   background-color: rgb(207, 75, 75);
+}
+.reset {
+  position: absolute;
+  bottom: -27.5px;
+  height: 25px;
+  right: 0;
+  width: 50px;
+  border-radius: 10px;
+}
+/* 组件动画 */
+.winPopBox-enter-active {
+  animation: winFlagUp 2s forwards;
+}
+
+@keyframes winFlagUp {
+  0% {
+    transform: translateY(30px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>

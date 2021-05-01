@@ -7,8 +7,6 @@
         <span class="iconfont">&#xe6c8;<span></span></span>
         <span class="iconfont" dir="rtl"><span></span>&#xe60d;</span>
       </div>
-      <!-- 重置按钮,这个按钮会将游戏导向最开始的页面,并且清除数据 -->
-      <button class="reset">重置</button>
       <router-view></router-view>
     </div>
   </div>
@@ -17,6 +15,9 @@
 <script>
 export default {
   name: "App",
+  data () {
+    return {}
+  }
 };
 </script>
 
@@ -50,14 +51,5 @@ export default {
 }
 .gameState span {
   flex: 1;
-}
-.reset {
-  height: 30px;
-  position: absolute;
-  bottom: -30px;
-  right: 10px;
-  min-width: 40px;
-  background-color: rgb(75, 196, 165);
-  border-radius: 20px;
 }
 </style>

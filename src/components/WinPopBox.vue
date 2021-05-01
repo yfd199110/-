@@ -1,32 +1,50 @@
 <template>
-  <div class="winpopbox_container">
-    {{whoWin}}赢了
+  <div :class="classList">
+    <span v-if="anyoneWin">{{whoPlay}}赢了</span>
+    <span v-else>{{whoPlay}}执棋</span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'WinPopBox',
-  props: ['whoWin']
+  props: {
+    whoPlay: {
+      type: String
+    },
+    anyoneWin: {
+      type: Boolean
+    }
+  },
+  // 组件数据
+  data () {
+    return {
+      // classList: ['winpopbox_container']
+    }
+  },
+  computed: {
+    classList () {
+      return this.whoPlay === 'computer' ? ['winpopbox_container', 'computer'] : ['winpopbox_container'];
+    }
+  }
 }
 </script>
 
 <style scoped>
 .winpopbox_container {
-  width: 250px;
+  width: 170px;
   height: 30px;
   position: absolute;
-  left: 45px;
-  top: 155px;
+  top: -60px;
   text-align: center;
   line-height: 30px;
-  color: transparent;
-  animation: popBox 2s ease .3s normal backwards;
+  background-color: greenyellow;
+  border-radius: 10%;
+  transition: all .5s ease;
 }
-
-@keyframes popBox {
-  from { top: 155px; } to { top: -30px; };
-  from { background-color: transparent; } to { background-color: #104785; };
-  from { color: transparent; } to { color: red; };
+.computer {
+  /* right: 0px; */
+  transform: translateX(100%);
+  background-color: red;
 }
 </style>

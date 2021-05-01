@@ -15,6 +15,7 @@ const store = new Vuex.Store({
   },
   getters: {
     chessList (state) {
+      console.log('getters exe');
       return state.chessman_list;
     },
     // 根据index拿到对应的那个对象
@@ -45,6 +46,15 @@ const store = new Vuex.Store({
           if (el.index === payload.index) {
             Vue.set(el, 'value', payload.value);
           }
+        })
+      })
+    },
+
+    // 重置chessman_list为初始的状态
+    reset_chessman_list (state) {
+      state.chessman_list.forEach(eleList => {
+        eleList.forEach(eleObj => {
+          Vue.set(eleObj, 'value', '');
         })
       })
     }
